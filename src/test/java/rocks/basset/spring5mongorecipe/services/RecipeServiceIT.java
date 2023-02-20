@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * Created by jt on 6/21/17.
  */
-@Disabled
 @SpringBootTest
 public class RecipeServiceIT {
 
@@ -37,7 +36,7 @@ public class RecipeServiceIT {
     @Autowired
     RecipeToRecipeCommand recipeToRecipeCommand;
 
-    @Transactional
+    //@Transactional
     @Test
     public void testSaveOfDescription() throws Exception {
         //given
