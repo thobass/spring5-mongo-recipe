@@ -1,5 +1,6 @@
 package rocks.basset.spring5mongorecipe.controllers;
 
+import lombok.RequiredArgsConstructor;
 import rocks.basset.spring5mongorecipe.commands.IngredientCommand;
 import rocks.basset.spring5mongorecipe.commands.RecipeCommand;
 import rocks.basset.spring5mongorecipe.commands.UnitOfMeasureCommand;
@@ -19,17 +20,12 @@ import org.springframework.web.bind.annotation.PostMapping;
  */
 @Slf4j
 @Controller
+@RequiredArgsConstructor
 public class IngredientController {
 
     private final IngredientService ingredientService;
     private final RecipeService recipeService;
     private final UnitOfMeasureService unitOfMeasureService;
-
-    public IngredientController(IngredientService ingredientService, RecipeService recipeService, UnitOfMeasureService unitOfMeasureService) {
-        this.ingredientService = ingredientService;
-        this.recipeService = recipeService;
-        this.unitOfMeasureService = unitOfMeasureService;
-    }
 
     @GetMapping("/recipe/{recipeId}/ingredients")
     public String listIngredients(@PathVariable String recipeId, Model model){
@@ -63,7 +59,7 @@ public class IngredientController {
         //init uom
         ingredientCommand.setUom(new UnitOfMeasureCommand());
 
-        model.addAttribute("uomList",  unitOfMeasureService.listAllUoms());
+        model.addAttribute("uomList",  unitOfMeasureService.listAllUoms().collectList().block());
 
         return "recipe/ingredient/ingredientform";
     }

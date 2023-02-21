@@ -1,5 +1,6 @@
 package rocks.basset.spring5mongorecipe.services;
 
+import reactor.core.publisher.Flux;
 import rocks.basset.spring5mongorecipe.commands.UnitOfMeasureCommand;
 import rocks.basset.spring5mongorecipe.converters.UnitOfMeasureToUnitOfMeasureCommand;
 import rocks.basset.spring5mongorecipe.domain.UnitOfMeasure;
@@ -9,8 +10,10 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import rocks.basset.spring5mongorecipe.repositories.reactive.UnitOfMeasureReactiveRepository;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static org.mockito.Mockito.*;
@@ -21,7 +24,7 @@ public class UnitOfMeasureServiceImplTest {
     UnitOfMeasureService service;
 
     @Mock
-    UnitOfMeasureRepository unitOfMeasureRepository;
+    UnitOfMeasureReactiveRepository unitOfMeasureRepository;
 
     @BeforeEach
     public void setUp() throws Exception {
@@ -33,19 +36,16 @@ public class UnitOfMeasureServiceImplTest {
     @Test
     public void listAllUoms() throws Exception {
         //given
-        Set<UnitOfMeasure> unitOfMeasures = new HashSet<>();
         UnitOfMeasure uom1 = new UnitOfMeasure();
         uom1.setId("1");
-        unitOfMeasures.add(uom1);
 
         UnitOfMeasure uom2 = new UnitOfMeasure();
         uom2.setId("2");
-        unitOfMeasures.add(uom2);
 
-        when(unitOfMeasureRepository.findAll()).thenReturn(unitOfMeasures);
+        when(unitOfMeasureRepository.findAll()).thenReturn(Flux.just(uom1, uom2));
 
         //when
-        Set<UnitOfMeasureCommand> commands = service.listAllUoms();
+        List<UnitOfMeasureCommand> commands = service.listAllUoms().collectList().block();
 
         //then
         assertEquals(2, commands.size());

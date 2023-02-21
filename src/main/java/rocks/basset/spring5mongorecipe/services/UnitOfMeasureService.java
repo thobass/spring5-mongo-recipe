@@ -1,5 +1,6 @@
 package rocks.basset.spring5mongorecipe.services;
 
+import reactor.core.publisher.Flux;
 import rocks.basset.spring5mongorecipe.commands.UnitOfMeasureCommand;
 
 import java.util.Set;
@@ -9,5 +10,5 @@ import java.util.Set;
  */
 public interface UnitOfMeasureService {
 
-    Set<UnitOfMeasureCommand> listAllUoms();
+    Flux<UnitOfMeasureCommand> listAllUoms();
 }

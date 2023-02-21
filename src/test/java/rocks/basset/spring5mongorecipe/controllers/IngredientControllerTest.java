@@ -2,8 +2,10 @@ package rocks.basset.spring5mongorecipe.controllers;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import reactor.core.publisher.Flux;
 import rocks.basset.spring5mongorecipe.commands.IngredientCommand;
 import rocks.basset.spring5mongorecipe.commands.RecipeCommand;
+import rocks.basset.spring5mongorecipe.commands.UnitOfMeasureCommand;
 import rocks.basset.spring5mongorecipe.services.IngredientService;
 import rocks.basset.spring5mongorecipe.services.RecipeService;
 import rocks.basset.spring5mongorecipe.services.UnitOfMeasureService;
@@ -83,7 +85,7 @@ public class IngredientControllerTest {
 
         //when
         when(recipeService.findCommandById(anyString())).thenReturn(recipeCommand);
-        when(unitOfMeasureService.listAllUoms()).thenReturn(new HashSet<>());
+        when(unitOfMeasureService.listAllUoms()).thenReturn(Flux.just(new UnitOfMeasureCommand()));
 
         //then
         mockMvc.perform(get("/recipe/1/ingredient/new"))
@@ -103,7 +105,7 @@ public class IngredientControllerTest {
 
         //when
         when(ingredientService.findByRecipeIdAndIngredientId(anyString(), anyString())).thenReturn(ingredientCommand);
-        when(unitOfMeasureService.listAllUoms()).thenReturn(new HashSet<>());
+        when(unitOfMeasureService.listAllUoms()).thenReturn(Flux.just(new UnitOfMeasureCommand()));
 
         //then
         mockMvc.perform(get("/recipe/1/ingredient/2/update"))
