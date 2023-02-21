@@ -14,6 +14,8 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import rocks.basset.spring5mongorecipe.repositories.reactive.RecipeReactiveRepository;
+import rocks.basset.spring5mongorecipe.repositories.reactive.UnitOfMeasureReactiveRepository;
 
 import java.util.Optional;
 
@@ -24,12 +26,14 @@ public class IngredientServiceImplTest {
 
     private final IngredientToIngredientCommand ingredientToIngredientCommand;
     private final IngredientCommandToIngredient ingredientCommandToIngredient;
+    @Mock
+    RecipeReactiveRepository recipeReactiveRepository;
 
     @Mock
     RecipeRepository recipeRepository;
 
     @Mock
-    UnitOfMeasureRepository unitOfMeasureRepository;
+    UnitOfMeasureReactiveRepository unitOfMeasureRepository;
 
     IngredientService ingredientService;
 
@@ -44,7 +48,7 @@ public class IngredientServiceImplTest {
         MockitoAnnotations.initMocks(this);
 
         ingredientService = new IngredientServiceImpl(ingredientToIngredientCommand, ingredientCommandToIngredient,
-                recipeRepository, unitOfMeasureRepository);
+                recipeReactiveRepository, recipeRepository, unitOfMeasureRepository);
     }
 
     @Test
@@ -74,7 +78,7 @@ public class IngredientServiceImplTest {
         when(recipeRepository.findById(anyString())).thenReturn(recipeOptional);
 
         //then
-        IngredientCommand ingredientCommand = ingredientService.findByRecipeIdAndIngredientId("1", "3");
+        IngredientCommand ingredientCommand = ingredientService.findByRecipeIdAndIngredientId("1", "3").block();
 
         //when
         assertEquals("3", ingredientCommand.getId());
@@ -100,7 +104,7 @@ public class IngredientServiceImplTest {
         when(recipeRepository.save(any())).thenReturn(savedRecipe);
 
         //when
-        IngredientCommand savedCommand = ingredientService.saveIngredientCommand(command);
+        IngredientCommand savedCommand = ingredientService.saveIngredientCommand(command).block();
 
         //then
         assertEquals("3", savedCommand.getId());
