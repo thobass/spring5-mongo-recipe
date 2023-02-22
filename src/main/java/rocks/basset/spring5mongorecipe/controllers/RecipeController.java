@@ -1,5 +1,6 @@
 package rocks.basset.spring5mongorecipe.controllers;
 
+import org.springframework.web.bind.WebDataBinder;
 import rocks.basset.spring5mongorecipe.commands.RecipeCommand;
 import rocks.basset.spring5mongorecipe.exceptions.NotFoundException;
 import rocks.basset.spring5mongorecipe.services.RecipeService;
@@ -43,7 +44,7 @@ public class RecipeController {
 
     @GetMapping("recipe/{id}/update")
     public String updateRecipe(@PathVariable String id, Model model){
-        model.addAttribute("recipe", recipeService.findCommandById(id).block());
+        model.addAttribute("recipe", recipeService.findCommandById(id));
         return RECIPE_RECIPEFORM_URL;
     }
 
