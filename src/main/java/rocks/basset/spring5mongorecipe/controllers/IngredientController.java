@@ -47,19 +47,14 @@ public class IngredientController {
     @GetMapping("recipe/{recipeId}/ingredient/new")
     public String newRecipe(@PathVariable String recipeId, Model model){
 
-        //make sure we have a good id value
-        RecipeCommand recipeCommand = recipeService.findCommandById(recipeId).block();
-        //todo raise exception if null
-
         //need to return back parent id for hidden form property
         IngredientCommand ingredientCommand = new IngredientCommand();
-//        ingredientCommand.setRecipeId(recipeId);
         model.addAttribute("ingredient", ingredientCommand);
 
         //init uom
         ingredientCommand.setUom(new UnitOfMeasureCommand());
 
-        model.addAttribute("uomList",  unitOfMeasureService.listAllUoms().collectList().block());
+        model.addAttribute("uomList",  unitOfMeasureService.listAllUoms());
 
         return "recipe/ingredient/ingredientform";
     }
